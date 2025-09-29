@@ -1,0 +1,8 @@
+services:
+site-inspector:
+build: .
+image: ghcr.io/masumoou/site-inspector:latest
+env_file: .env
+ports:
+- "8000:8000"
+restart: unless-stopped

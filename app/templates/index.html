@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post" action="/scan" class="card">
+<label for="url">Target URL (https://example.com)</label>
+<input id="url" name="url" type="url" placeholder="https://example.com" required />
+<button type="submit">Run Inspection</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{ title if title else 'Site Inspector' }}</title>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+<header>
+<h1>🔍 Site Inspector</h1>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+<footer>
+<p>Use only with permission. v0.1.0</p>
+</footer>
+</body>
+</html>

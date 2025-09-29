@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+<h2>Report for {{ url }}</h2>
+<pre class="small">Started: {{ report.started }} | Finished: {{ report.finished }}</pre>
+
+
+<h3>General</h3>
+<ul>
+<li><b>Final URL:</b> {{ report.general.final_url }}</li>
+<li><b>Status:</b> {{ report.general.status_code }}</li>
+<li><b>Server:</b> {{ report.general.server or '—' }}</li>
+<li><b>X-Powered-By:</b> {{ report.general.x_powered_by or '—' }}</li>
+<li><b>Technologies:</b> {{ report.general.techs | join(', ') if report.general.techs else '—' }}</li>
+<li><b>CDN/WAF Hints:</b> {{ report.general.cdn_waf | join(', ') if report.general.cdn_waf else '—' }}</li>
+<li><b>Cloud Hints:</b> {{ report.general.cloud | join(', ') if report.general.cloud else '—' }}</li>
+</ul>
+
+
+<h3>Security Headers</h3>
+<ul>
+{% for item in report.security.headers %}
+<li><b>{{ item.name }}:</b> {{ item.value or 'missing' }} {% if item.advice %}— <i>{{ item.advice }}</i>{% endif %}</li>
+{% endfor %}
+</ul>
+
+
+<h3>Cookies</h3>
+<ul>
+{% for ck in report.security.cookies %}
+<li><b>{{ ck.name }}</b> — Secure={{ ck.secure }}, HttpOnly={{ ck.httponly }}, SameSite={{ ck.samesite or '—' }}</li>
+{% endfor %}
+{% if not report.security.cookies %}<li>—</li>{% endif %}
+</ul>
+
+
+<h3>WordPress</h3>
+{% if report.wordpress.detected %}
+<ul>
+<li><b>Version:</b> {{ report.wordpress.version or 'unknown' }}</li>
+<li><b>Theme:</b> {{ report.wordpress.theme or '—' }}</li>
+<li><b>Plugins (lightweight):</b> {{ report.wordpress.plugins | join(', ') if report.wordpress.plugins else '—' }}</li>
+</ul>
+{% else %}
+<p>Not detected.</p>
+{% endif %}
+
+
+<h3>Ports (optional)</h3>
+{% if report.ports and report.ports.results %}
+<pre>{{ report.ports.results | tojson(indent=2) }}</pre>
+{% else %}
+<p>Skipped (enable in .env).</p>
+{% endif %}
+
+
+<h3>Notes & Recommendations</h3>
+<ul>
+{% for note in report.notes %}
+<li>{{ note }}</li>
+{% endfor %}
+{% if not report.notes %}<li>—</li>{% endif %}
+</ul>
+</div>
+{% endblock %}
