@@ -39,7 +39,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner | lower }}/site-inspector:latest
+          tags: ghcr.io/masumoou/site-inspector:latest  # Manually change this to lowercase
 
   deploy-ssh:
     if: github.ref == 'refs/heads/main'
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH to server and deploy
-        uses: appleboy/ssh-action@v0.1.0  # You can change to v0.1.0 for more stability
+        uses: appleboy/ssh-action@v0.1.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
@@ -55,10 +55,10 @@ jobs:
           script: |
             set -e
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/${{ github.repository_owner | lower }}/site-inspector:latest
+            docker pull ghcr.io/masumoou/site-inspector:latest  # Manually change this to lowercase
             docker stop site-inspector || true
             docker rm site-inspector || true
             docker run -d --name site-inspector --restart unless-stopped \
               --env-file /opt/site-inspector/.env -p 8000:8000 \
-              ghcr.io/${{ github.repository_owner | lower }}/site-inspector:latest
+              ghcr.io/masumoou/site-inspector:latest  # Manually change this to lowercase
 
